@@ -1,23 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dumbshell.h                                        :+:      :+:    :+:   */
+/*   flipbit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/05/18 16:05:00 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/19 09:04:44 by arraji           ###   ########.fr       */
+/*   Created: 2020/05/18 12:15:03 by arraji            #+#    #+#             */
+/*   Updated: 2020/05/18 12:15:37 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DUMBSHELL
-# define DUMBSHELL
+#include "libft.h"
 
-# include "stdio.h"
-# include "libft.h"
-# include "struct.h"
-# include "parser.h"
-# include "error.h"
-# include "errno.h"
-void	checker(char *line);
-#endif
+void	flip_bit(int *data, int bit)
+{
+	if (AND(*data, bit))
+		BIT_OFF(*data, bit);
+	else
+		BIT_ON(*data, bit);
+}

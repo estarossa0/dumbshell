@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: arraji <arraji@student.42.fr>              +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/05/18 16:04:41 by arraji            #+#    #+#              #
+#    Updated: 2020/05/18 19:08:01 by arraji           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME = dumbshell
 FLAGS = # -Wall -Wextra -Werror
 SRC_FOLDER = ./src
@@ -16,6 +28,10 @@ RESET = \033[0m
 BONUS_HEADER_FOLDER = ./bonus_header
 
 SRC_FILES = main.c \
+sets.c \
+error.c \
+lexer.c \
+parser.c \
 here_we_go.c \
 dumbshell.c \
 

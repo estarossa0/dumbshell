@@ -1,15 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/05/18 16:04:28 by arraji            #+#    #+#             */
+/*   Updated: 2020/05/19 11:41:33 by arraji           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "dumbshell.h"
+
+void	init(t_all *all)
+{
+	all->parser.bits = 64;
+	all->parser.line = NULL;
+	all->parser.rt = 1;
+	all->pipe = NULL;
+}
 
 int main(void)
 {
-	char *line;
-	int rt;
+	t_all	all;
 
-	rt = 1;
-	while (rt == 1)
-	{
-		ft_fprintf(1, PS);
-		rt = get_next_line(1, &line);
-
-	}
+	init(&all);
+	get_data(&all);
 }

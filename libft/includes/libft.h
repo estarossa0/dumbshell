@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 02:17:00 by arraji            #+#    #+#             */
-/*   Updated: 2020/03/06 02:59:14 by arraji           ###   ########.fr       */
+/*   Updated: 2020/05/18 19:24:49 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 500
 # endif
-
+# define vibe_check write(1, "v", 1);
 typedef	struct	s_list
 {
 	struct s_list	*next;
@@ -88,4 +88,29 @@ int				valid_num(char *str, int type);
 double			ft_atof(char *str);
 int				ft_strcmp(char *s1, char *s2);
 size_t			ft_linelen(char const *str, int type);
+void			flip_bit(int *data, int bit);
+/*
+** test if a bit is on
+*/
+#define AND(x, y)		(x & y) == y
+/*
+** test if a bit if off
+*/
+#define NAND(x, y)		(x & y) == 0
+/*
+** useless
+*/
+#define OR(x, y)		(x | y) == y
+/*
+** useless
+*/
+#define NOR(x, y)		(x | y) == 0
+/*
+** flip a bit on
+*/
+#define BIT_ON(x, y)	x |= y
+/*
+** flip a bit off
+*/
+#define BIT_OFF(x, y)	x &= ~y
 #endif
