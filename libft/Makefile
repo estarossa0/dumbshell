@@ -6,7 +6,7 @@
 #    By: arraji <arraji@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/18 13:57:03 by arraji            #+#    #+#              #
-#    Updated: 2020/05/18 13:03:59 by arraji           ###   ########.fr        #
+#    Updated: 2020/05/20 17:57:54 by arraji           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -88,6 +88,7 @@ SRC_FILES  =	ft_atoi.c \
 				ft_linelen.c \
 				ft_free_tab.c \
 				flip_bit.c \
+				standered_error.c \
 
 
 OBJECT_FILES = $(SRC_FILES:.c=.o)

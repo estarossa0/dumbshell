@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 16:05:12 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/19 09:25:19 by arraji           ###   ########.fr       */
+/*   Updated: 2020/05/20 18:39:47 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,9 @@
 # define	RED_FROM		-7
 # define	RED_TO_APP		-9
 void	get_data(t_all *);
+void	parser(char *line, t_all *all);
 void	lexer(char *, t_parser *parser);
-void	set_d_quotes(char *line, int index, t_parser *parser);
-void	set_s_quotes(char *line, int index, t_parser *parser);
-void	set_space(char *line, int index, t_parser *parser);
-void	set_dolar(char *line, int index, t_parser *parser);
-void	set_semicolon(char *line, int index, t_parser *parser);
-void	set_pipe(char *line, int index, t_parser *parser);
-void	set_red_to(char *line, int index, t_parser *parser);
-void	set_red_from(char *line, int index, t_parser *parser);
+void	sets(char *line, int index, t_parser *parser);
+void	add_word(t_args **list, char *word, int type);
+void	parse_file(t_command *current, char *line, int *index);
 #endif

@@ -6,79 +6,77 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 16:04:36 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/19 11:53:36 by arraji           ###   ########.fr       */
+/*   Updated: 2020/05/20 18:39:41 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "dumbshell.h"
 
-void	parse_file(char *line, char *new, int *indexs)
+static	void	init_list(t_command **current, t_all *all)
 {
-	if (line[indexs[0]] == RED_TO_APP)
-		indexs[0]++;
-	new[indexs[1]++] = line[indexs[0]++];
-	while(line[indexs[0]] == WORD_SEP)
-			indexs[0]++;
-	while (line[indexs[0]] != WORD_SEP && line[indexs[0]] != '\0')
+	if (all->pipe == NULL)
 	{
-		if (line[indexs[0]] != REMOVED)
-			new[indexs[1]++] = line[indexs[0]];
-		indexs[0]++;
+		ft_lstadd_back((t_list **)&(all->pipe), malloc(sizeof(t_pipeline)));
+		all->pipe->cmd_head = NULL;
+		*current = (t_command *)ft_lstadd_back((t_list **)&(all->pipe->cmd_head), malloc(sizeof(t_command)));
+		(*current)->args = NULL;
 	}
 }
 
-/*
-** [0] -> line index
-** [1] -> new index
-*/
-
-char	*new_line(char *line)
+static	void	switch_current(t_command **current, char *line, int *index, t_all *all)
 {
-	int		indexs[2];
-	char	*new;
+	t_pipeline	*pipe;
 
-	indexs[0] = -1;
-	indexs[1] = 0;
-	new = malloc(ft_strlen(line));
-	ft_bzero(new, ft_strlen(line));
-	while(line[++(indexs[0])])
+	if (line[*index] == PIPELINE_SEP)
 	{
-		if (line[(indexs[0])] == REMOVED)
+		(*index)++;
+		pipe = (t_pipeline*)ft_lstadd_back((t_list **)&(all->pipe), malloc(sizeof(t_pipeline)));
+		pipe->cmd_head = NULL;
+		*current = (t_command *)ft_lstadd_back((t_list **)&(pipe->cmd_head), malloc(sizeof(t_command)));
+		(*current)->args = NULL;
+		return ;
+	}
+	else
+	{
+		(*index)++;
+		*current = (t_command *)ft_lstadd_back((t_list **)current, malloc(sizeof(t_command)));
+		(*current)->args = NULL;
+		return ;
+	}
+}
+
+
+void	add_word(t_args **list, char *word, int type)
+{
+	t_args	*current;
+
+	current = (t_args *)ft_lstadd_back((t_list **)list, malloc(sizeof(t_args)));
+	current->type = type;
+	if (type == 0)
+		current->c = *word;
+	else if (type == 1)
+		current->str = word;
+}
+
+void			parser(char *line, t_all *all)
+{
+	int			index;
+	t_command	*current;
+
+	index = -1;
+	while (line[++index])
+	{
+		init_list(&current, all);
+		if (line[index] == REMOVED)
 			continue ;
-		else if (line[indexs[0]] == RED_FROM || line[indexs[0]] == RED_TO
-		|| line[indexs[0]] == RED_TO_APP)
-			parse_file(line, new, indexs);
+		else if (line[index] == RED_FROM || line[index] == RED_TO
+		|| line[index] == RED_TO_APP)
+			parse_file(current, line, &index);
+		else if (line[index] == VAR)
+			variable_expansion(line, &index, current);
+		else if (line[index] == CMD_SEP || line[index] == PIPELINE_SEP)
+			switch_current(&current, line, &index, all);
 		else
-		{
-			new[indexs[1]++] = line[indexs[0]];
-		}
+			add_word(&current->list_args, &line[index], 0);
 	}
-	free(line);
-	return (new);
-}
-
-void	parse_commands(t_all *all)
-{
-
-}
-
-void	parser(t_all *all)
-{
-	all->parser.line = new_line(all->parser.line);
-
-}
-
-void	get_data(t_all *all)
-{
-	char *new;
-
-	while (all->parser.rt == 1)
-	{
-		ft_fprintf(1, PS);
-		all->parser.rt = get_next_line(1, &all->parser.line);
-		lexer(all->parser.line, &all->parser);
-		checker(all->parser.line);
-		parser(all);
-	}
-
 }

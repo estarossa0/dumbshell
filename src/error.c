@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 16:04:52 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/19 11:34:42 by arraji           ###   ########.fr       */
+/*   Updated: 2020/05/20 17:40:15 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,17 @@ void	chill(int *bits)
 
 int		error(int err, char *need)
 {
-	if (*need == '\0')
+	if (need && *need == '\0')
 		need = "newline";
-	else
+	else if (err == E_SYNTAX && need)
 	{
 		need[0] = *need;
 		need[1] = '\0';
 	}
-	err == E_SYNTAX ?
-	ft_fprintf(1, "dumbshell: parse error near `%s'\n", need) : 1;
-	/* err == E_PIPE ? ft_fprintf(1, "dumbshell: pipe in the end of input\n") : 1;
-	err == E_S_Q ? ft_fprintf(1, "dumbshell: Unclosed single quote\n") : 1;
-	err == E_D_Q ? ft_fprintf(1, "dumbshell: Unclosed double quote\n") : 1; */
+	ft_fprintf(2, "dumbshell: ");
+	err == E_SYNTAX ? ft_fprintf(2, "parse error near `%s'\n", need) : 1;
+	err == E_STANDARD ? ft_fprintf(2, "%s.\n", strerror(errno)) : 1;
+	err == E_FILE ? ft_fprintf(2, "`%s` %s\n", need, strerror(errno)) : 1;
 	exit(err);
 }
 
@@ -85,4 +84,47 @@ void	checker(char *line)
 		}
 	}
 	write(1, "\n", 1);
+}
+
+void	list_checker(t_all *all)
+{
+	int		pipe_number;
+	int		command_number;
+	t_command	*cmd;
+	t_pipeline	*pipe;
+	t_args		*args;
+
+	pipe_number = 1;
+	pipe = all->pipe;
+	while (pipe)
+	{
+		cmd = pipe->cmd_head;
+		command_number = 1;
+		ft_fprintf(1, "pipe %d:\n", pipe_number);
+		while (cmd)
+		{
+			args = cmd->list_args;
+			ft_fprintf(1, "cmd %d: ", command_number);
+			while (args)
+			{
+				if (args->type == 0)
+				{
+					if (args->c == WORD_SEP)
+						ft_fprintf(1, "%s<WORD SEP>%s", PRINT_RED, RESET);
+					else
+						ft_fprintf(1, "%c", args->c);
+				}
+				else
+				{
+					ft_fprintf(1, "%s", args->str);
+				}
+				args = args->next;
+			}
+			command_number++;
+			write(1, "\n", 1);
+			cmd = cmd->next;
+		}
+		pipe_number++;
+		pipe = pipe->next;
+	}
 }

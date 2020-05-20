@@ -6,28 +6,32 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 17:51:27 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/19 09:52:56 by arraji           ###   ########.fr       */
+/*   Updated: 2020/05/20 18:59:49 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "dumbshell.h"
 
 
-void	set_d_quotes(char *line, int index, t_parser *parser)
+static	void	set_d_quotes(char *line, int index, t_parser *parser)
 {
 	chill(&parser->bits);
+	if (AND(parser->bits, BS_Q))
+		return ;
 	line[index] = REMOVED;
 	flip_bit(&parser->bits, BD_Q);
 }
 
-void	set_s_quotes(char *line, int index, t_parser *parser)
+static	void	set_s_quotes(char *line, int index, t_parser *parser)
 {
+	if (AND(parser->bits, BD_Q))
+		return ;
 	chill(&parser->bits);
 	line[index] = REMOVED;
 	flip_bit(&parser->bits, BS_Q);
 }
 
-void	set_space(char *line, int index, t_parser *parser)
+static	void	set_space(char *line, int index, t_parser *parser)
 {
 	if (AND(parser->bits, BS_Q) || AND(parser->bits, BD_Q))
 		return ;
@@ -35,7 +39,7 @@ void	set_space(char *line, int index, t_parser *parser)
 		line[index] = WORD_SEP;
 }
 
-void	set_dolar(char *line, int index, t_parser *parser)
+static	void	set_dolar(char *line, int index, t_parser *parser)
 {
 	if (AND(parser->bits, BS_Q))
 		return ;
@@ -49,9 +53,10 @@ void	set_dolar(char *line, int index, t_parser *parser)
 		!(AND(parser->bits, BD_Q)) ? line[index] = REMOVED : 1;
 	else
 		line[index] = VAR;
+
 }
 
-void	set_semicolon(char *line, int index, t_parser *parser)
+static	void	set_semicolon(char *line, int index, t_parser *parser)
 {
 	if (AND(parser->bits, BD_Q) || AND(parser->bits, BS_Q))
 		return ;
@@ -65,7 +70,7 @@ void	set_semicolon(char *line, int index, t_parser *parser)
 	}
 }
 
-void	set_pipe(char *line, int index, t_parser *parser)
+static	void	set_pipe(char *line, int index, t_parser *parser)
 {
 	if (AND(parser->bits, BD_Q) || AND(parser->bits, BS_Q))
 		return ;
@@ -79,7 +84,7 @@ void	set_pipe(char *line, int index, t_parser *parser)
 	}
 }
 
-void	set_red_to(char *line, int index, t_parser *parser)
+static	void	set_red_to(char *line, int index, t_parser *parser)
 {
 	if (AND(parser->bits, BD_Q) || AND(parser->bits, BS_Q))
 		return;
@@ -97,11 +102,35 @@ void	set_red_to(char *line, int index, t_parser *parser)
 	}
 }
 
-void	set_red_from(char *line, int index, t_parser *parser)
+static	void	set_red_from(char *line, int index, t_parser *parser)
 {
 	if (AND(parser->bits, BD_Q) || AND(parser->bits, BS_Q))
 		return ;
 	freak_out(parser->bits, line, index);
 	line[index] = RED_FROM;
 	BIT_ON(parser->bits, BRED_FROM);
+}
+
+void			sets(char *line, int index, t_parser *parser)
+{
+	if (line[index] < 0)
+		return ;
+	else if (line[index] == '|')
+		set_pipe(line, index, parser);
+	else if (line[index] == '\'')
+		set_s_quotes(line, index, parser);
+	else if (line[index] == '"')
+		set_d_quotes(line, index, parser);
+	else if (line[index] == ';')
+		set_semicolon(line, index, parser);
+	else if (line[index] == '$')
+		set_dolar(line, index, parser);
+	else if (line[index] == ' ')
+		set_space(line, index, parser);
+	else if (line[index] == '>')
+		set_red_to(line, index, parser);
+	else if (line[index] == '<')
+		set_red_from(line, index, parser);
+	else
+		chill(&parser->bits);
 }

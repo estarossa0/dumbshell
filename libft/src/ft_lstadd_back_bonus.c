@@ -6,16 +6,17 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/19 22:37:37 by arraji            #+#    #+#             */
-/*   Updated: 2019/10/29 02:50:52 by arraji           ###   ########.fr       */
+/*   Updated: 2020/05/20 17:48:45 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstadd_back(t_list **alst, t_list *new)
+t_list	*ft_lstadd_back(t_list **alst, t_list *new)
 {
 	t_list *save;
 
+	new == NULL ? standered_error() : 1;
 	if (!(*alst))
 	{
 		(*alst) = new;
@@ -30,4 +31,5 @@ void	ft_lstadd_back(t_list **alst, t_list *new)
 		new->next = NULL;
 		*alst = save;
 	}
+	return (new);
 }

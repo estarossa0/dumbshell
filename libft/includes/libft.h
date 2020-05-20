@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 02:17:00 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/18 19:24:49 by arraji           ###   ########.fr       */
+/*   Updated: 2020/05/20 17:45:07 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define FT_LIBFT_H
 # include <stdlib.h>
 # include <unistd.h>
+# include <string.h>
+# include <errno.h>
 # include "get_next_line.h"
 # include "ft_fprintf.h"
 # ifndef BUFFER_SIZE
@@ -64,7 +66,7 @@ int				ft_memcmp(const void *s1, const void *s2, size_t n);
 t_list			*ft_lstnew(void *content);
 void			ft_lstadd_front(t_list **alst, t_list *new);
 int				ft_lstsize(t_list *lst);
-void			ft_lstadd_back(t_list **alst, t_list *new);
+t_list			*ft_lstadd_back(t_list **alst, t_list *new);
 t_list			*ft_lstlast(t_list *lst);
 void			ft_lstdelone(t_list *lst, void (*del)(void*));
 void			ft_lstclear(t_list **lst, void (*del)(void*));
@@ -89,6 +91,7 @@ double			ft_atof(char *str);
 int				ft_strcmp(char *s1, char *s2);
 size_t			ft_linelen(char const *str, int type);
 void			flip_bit(int *data, int bit);
+void			standered_error();
 /*
 ** test if a bit is on
 */
