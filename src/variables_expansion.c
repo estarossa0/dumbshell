@@ -19,11 +19,12 @@ void	variable_expansion(char *line, int *index, t_command *current)
 	char	*var_name;
 	int		save;
 	char	*var_value;
+
 	(*index)++;
 	save = *index;
-	while(ft_isalnum(line[*index]) || line[*index] == '_')
+	while(ft_isalnum(line[*index + 1]) || line[*index + 1] == '_')
 		(*index)++;
-	var_name = ft_substr(line, save, (*index) - save);
+	var_name = ft_substr(line, save, (*index) - save + 1);
 	var_value = get_var_value(var_name);
 	if (var_value)
 		add_word(&current->list_args, var_value, 1);

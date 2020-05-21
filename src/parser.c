@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 16:04:36 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/20 18:39:41 by arraji           ###   ########.fr       */
+/*   Updated: 2020/05/21 15:17:39 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,12 @@ void	add_word(t_args **list, char *word, int type)
 	if (type == 0)
 		current->c = *word;
 	else if (type == 1)
+	{
 		current->str = word;
+		current->c = CNULL;
+	}
 }
+
 
 void			parser(char *line, t_all *all)
 {
@@ -79,4 +83,5 @@ void			parser(char *line, t_all *all)
 		else
 			add_word(&current->list_args, &line[index], 0);
 	}
+	reverse_parser(all);
 }

@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 16:05:20 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/20 18:40:24 by arraji           ###   ########.fr       */
+/*   Updated: 2020/05/21 16:02:54 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef	struct	s_command
 {
 	struct	s_command	*next;
 	char				*cmd;
-	char				**args;
+	char				**argv;
 	struct	s_args		*list_args;
 	char				*path;
 	int					fd;

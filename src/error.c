@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 16:04:52 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/20 17:40:15 by arraji           ###   ########.fr       */
+/*   Updated: 2020/05/21 16:53:04 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,40 @@ void	checker(char *line)
 		}
 	}
 	write(1, "\n", 1);
+}
+
+void	list_checker2(t_all *all)
+{
+int		pipe_number;
+	int		command_number;
+	t_command	*cmd;
+	t_pipeline	*pipe;
+	t_args		*args;
+
+	pipe_number = 1;
+	pipe = all->pipe;
+	while (pipe)
+	{
+		cmd = pipe->cmd_head;
+		command_number = 1;
+		ft_fprintf(1, "pipe %d:\n", pipe_number);
+		while (cmd)
+		{
+			ft_fprintf(1, "cmd %d: ", command_number);
+			args = cmd->list_args;
+			int index = 0;
+			while (cmd->argv[index])
+			{
+				ft_fprintf(1, "%s ", cmd->argv[index++]);
+				args = args->next;
+			}
+			command_number++;
+			write(1, "\n", 1);
+			cmd = cmd->next;
+		}
+		pipe_number++;
+		pipe = pipe->next;
+	}
 }
 
 void	list_checker(t_all *all)

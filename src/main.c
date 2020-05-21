@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 16:04:28 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/20 18:18:08 by arraji           ###   ########.fr       */
+/*   Updated: 2020/05/21 15:21:58 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	get_data(t_all *all)
 		lexer(all->parser.line, &all->parser);
 		checker(all->parser.line);
 		parser(all->parser.line, all);
-		list_checker(all);
+		list_checker2(all);
 		all->pipe = NULL;
 	}
 
