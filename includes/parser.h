@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 16:05:12 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/22 15:51:22 by arraji           ###   ########.fr       */
+/*   Updated: 2020/05/23 10:47:12 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@
 # define	PIPELINE_SEP	-3
 # define	CMD_SEP			-4
 # define	VAR				-5
-# define	RED_TO			-6
-# define	RED_FROM		-7
-# define	RED_TO_APP		-9
+# define	RED_TO			-8
+# define	RED_FROM		-16
+# define	RED_TO_APP		-32
 # define	CNULL			-10
 void	get_data(t_all *);
 void	parser(char *line, t_all *all);

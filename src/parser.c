@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 16:04:36 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/23 00:20:17 by arraji           ###   ########.fr       */
+/*   Updated: 2020/05/23 10:44:32 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static	void	init_list(t_command **current, t_all *all)
 		*current = (t_command *)ft_lstadd_back((t_list **)&(all->pipe->cmd_head), malloc(sizeof(t_command)));
 		(*current)->list_args = NULL;
 		(*current)->file = NULL;
+		(*current)->read_type = 0;
 	}
 }
 
@@ -35,14 +36,16 @@ static	void	switch_current(t_command **current, char *line, int *index, t_all *a
 		pipe->cmd_head = NULL;
 		*current = (t_command *)ft_lstadd_back((t_list **)&(pipe->cmd_head), malloc(sizeof(t_command)));
 		(*current)->list_args = NULL;
-		return ;
+		(*current)->file = NULL;
+		(*current)->read_type = 0;
 	}
 	else
 	{
 		(*index)++;
 		*current = (t_command *)ft_lstadd_back((t_list **)current, malloc(sizeof(t_command)));
 		(*current)->list_args = NULL;
-		return ;
+		(*current)->file = NULL;
+		(*current)->read_type = 1;
 	}
 }
 

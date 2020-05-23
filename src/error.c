@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 16:04:52 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/22 16:00:55 by arraji           ###   ########.fr       */
+/*   Updated: 2020/05/23 12:39:25 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int		error(int err, char *need)
 	err == E_STANDARD ? ft_fprintf(2, "%s.\n", strerror(errno)) : 1;
 	err == E_FILE ? ft_fprintf(2, "`%s` %s\n", need, strerror(errno)) : 1;
 	err == E_NOCMD ? ft_fprintf(2, "command not found: %s\n", need) : 1;
-	err == 	E_WPATH ? ft_fprintf(1, "no such file or directory: %s\n", need) : 1;
+	err == 	E_WPATH ? ft_fprintf(2, "no such file or directory: %s\n", need) : 1;
 	err ==	E_ISDIR ? ft_fprintf(2, "%s: Is a directory\n", need) : 1;
 	exit(err);
 }

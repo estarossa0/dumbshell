@@ -10,6 +10,7 @@ void	init_env()
 	while(environ[index])
 	{
 		split = 0;
+
 		current = (t_env*)ft_lstadd_back((t_list**)&g_env, malloc(sizeof(t_env)));
 		current->full_var =  ft_strdup(environ[index]);
 		while (environ[index][split] != '=')

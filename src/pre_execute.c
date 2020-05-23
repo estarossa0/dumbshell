@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/22 12:32:22 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/22 14:12:58 by arraji           ###   ########.fr       */
+/*   Updated: 2020/05/23 12:53:38 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,17 @@ static	int		with_path(char *name)
 	}
 	return (0);
 }
+void	dup_close(int fd1, int fd2)
+{
+	dup2(fd1, fd2);
+	close(fd1);
+}
 
-void	pre_execute(t_command *cmd)
+void	pre_execute(t_command *cmd, int pipefd[2], int savefd[2])
 {
 	struct	stat buf;
 
+	{
 	if (with_path(cmd->cmd_name))
 		cmd->full_path = ft_strdup(cmd->cmd_name);
 	else
@@ -86,4 +92,16 @@ void	pre_execute(t_command *cmd)
 		error(E_WPATH, cmd->full_path);
 	else if (S_ISDIR(buf.st_mode))
 		error(E_ISDIR, cmd->full_path);
+	}
+	{
+		pipe(pipefd);
+		if (cmd->file && AND(cmd->read_type, RED_FROM * -1))
+			dup_close(cmd->fd, STDIN_FILENO);
+		else if(cmd->file && (AND(cmd->read_type, RED_TO * -1) || AND(cmd->read_type, RED_TO_APP * -1)))
+			dup_close(cmd->fd, STDOUT_FILENO);
+		else if (cmd->next)
+			dup_close(pipefd[WRITE_END], STDOUT_FILENO);
+		else if (cmd->next == NULL)
+			dup2(savefd[1], STDOUT_FILENO);
+	}
 }
