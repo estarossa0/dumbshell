@@ -87,7 +87,7 @@ void	link_argv(t_command *cmd)
 		list[0] = list[1];
 		cmd->argv[index++] = list[1]->str;
 		list[1] = list[1]->next;
-		free(list[0]);
+		ft_end((void **)&list[0], NULL, 1);
 	}
 	cmd->argv[index] = NULL;
 }
@@ -105,6 +105,7 @@ void	reverse_parser(t_all *all)
 		{
 			reverse_args(&(current_cmd->list_args));
 			link_argv(current_cmd);
+			current_cmd->cmd_name = current_cmd->argv[0];
 			current_cmd = current_cmd->next;
 		}
 		current_pipe = current_pipe->next;

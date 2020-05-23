@@ -6,7 +6,7 @@
 #    By: arraji <arraji@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/05/18 16:04:41 by arraji            #+#    #+#              #
-#    Updated: 2020/05/20 17:58:36 by arraji           ###   ########.fr        #
+#    Updated: 2020/05/22 13:35:18 by arraji           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ RESET = \033[0m
 BONUS_HEADER_FOLDER = ./bonus_header
 
 SRC_FILES = main.c \
+pre_execute.c \
 env_handle.c \
 parser_needs.c \
 file_expansion.c \

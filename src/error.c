@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 16:04:52 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/21 16:53:04 by arraji           ###   ########.fr       */
+/*   Updated: 2020/05/22 16:00:55 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,13 @@ int		error(int err, char *need)
 		need[0] = *need;
 		need[1] = '\0';
 	}
-	ft_fprintf(2, "dumbshell: ");
+	ft_fprintf(2, "dumbshell %d: ", err);
 	err == E_SYNTAX ? ft_fprintf(2, "parse error near `%s'\n", need) : 1;
 	err == E_STANDARD ? ft_fprintf(2, "%s.\n", strerror(errno)) : 1;
 	err == E_FILE ? ft_fprintf(2, "`%s` %s\n", need, strerror(errno)) : 1;
+	err == E_NOCMD ? ft_fprintf(2, "command not found: %s\n", need) : 1;
+	err == 	E_WPATH ? ft_fprintf(1, "no such file or directory: %s\n", need) : 1;
+	err ==	E_ISDIR ? ft_fprintf(2, "%s: Is a directory\n", need) : 1;
 	exit(err);
 }
 
@@ -104,12 +107,10 @@ int		pipe_number;
 		while (cmd)
 		{
 			ft_fprintf(1, "cmd %d: ", command_number);
-			args = cmd->list_args;
 			int index = 0;
 			while (cmd->argv[index])
 			{
 				ft_fprintf(1, "%s ", cmd->argv[index++]);
-				args = args->next;
 			}
 			command_number++;
 			write(1, "\n", 1);

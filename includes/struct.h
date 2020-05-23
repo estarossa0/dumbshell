@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 16:05:20 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/21 16:02:54 by arraji           ###   ########.fr       */
+/*   Updated: 2020/05/22 12:29:14 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ typedef	struct	s_args
 typedef	struct	s_command
 {
 	struct	s_command	*next;
-	char				*cmd;
+	char				*cmd_name;
 	char				**argv;
 	struct	s_args		*list_args;
-	char				*path;
+	char				*full_path;
 	int					fd;
 	char				*file;
 	char				read_type;
@@ -45,7 +45,6 @@ typedef	struct s_pipeline
 {
 	struct	s_pipeline	*next;
 	struct	s_command	*cmd_head;
-	struct	s_command	*cmd;
 }				t_pipeline;
 
 typedef	struct	s_all
@@ -58,7 +57,7 @@ typedef	struct	s_all
 typedef	struct	s_env
 {
 	struct	s_env	*next;
-	char	*var;
+	char	*key;
 	char	*value;
 	char	*full_var;
 }				t_env;

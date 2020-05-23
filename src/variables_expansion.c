@@ -4,10 +4,12 @@ char	*get_var_value(char *var_name)
 {
 	t_env	*curr;
 
-	curr = env;
+	curr = g_env;
+	if (ft_strcmp(var_name, "?") == 0)
+		return (ft_itoa(g_all->exit_status));
 	while (curr)
 	{
-		if (ft_strcmp(var_name, curr->var) == 0)
+		if (ft_strcmp(var_name, curr->key) == 0)
 			return(curr->value);
 		curr = curr->next;
 	}

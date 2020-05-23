@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 16:04:28 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/21 15:21:58 by arraji           ###   ########.fr       */
+/*   Updated: 2020/05/22 16:15:21 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,13 @@
 
 void	init(t_all *all)
 {
+	all->exit_status = 0;
 	all->parser.bits = 64;
 	all->parser.line = NULL;
 	all->parser.rt = 1;
 	all->pipe = NULL;
-	env = NULL;
+	g_env = NULL;
+	g_total_env = 0;
 	init_env();
 }
 
@@ -35,6 +37,7 @@ void	get_data(t_all *all)
 		checker(all->parser.line);
 		parser(all->parser.line, all);
 		list_checker2(all);
+		here_we_go(all);
 		all->pipe = NULL;
 	}
 
@@ -43,6 +46,7 @@ int main(void)
 {
 	t_all	all;
 
+	g_all = &all;
 	init(&all);
 	get_data(&all);
 }
