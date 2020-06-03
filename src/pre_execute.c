@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/22 12:32:22 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/23 12:53:38 by arraji           ###   ########.fr       */
+/*   Updated: 2020/06/02 19:03:50 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ static	void	get_path(t_command *cmd, char *name)
 			if (path != NULL)
 				cmd->full_path = path;
 			else
-				error(E_NOCMD, cmd->cmd_name);
-		break ;
+				error(E_NOCMD, 127, cmd->cmd_name);
+			break ;
 		}
 		curr = curr->next;
 	}
@@ -73,35 +73,34 @@ static	int		with_path(char *name)
 	}
 	return (0);
 }
-void	dup_close(int fd1, int fd2)
+
+static	void	prepare_fd(t_command *cmd, int pipefd[2], int savefd[2])
 {
-	dup2(fd1, fd2);
-	close(fd1);
+	pipe(pipefd);
+	if (cmd->file && AND(cmd->read_type, RED_FROM * -1))
+		dup_close(cmd->fd, STDIN_FILENO);
+	else if(cmd->file && (AND(cmd->read_type, RED_TO * -1) || AND(cmd->read_type, RED_TO_APP * -1)))
+		dup_close(cmd->fd, STDOUT_FILENO);
+	else if (cmd->next)
+		dup_close(pipefd[WRITE_END], STDOUT_FILENO);
+	else if (cmd->next == NULL)
+		dup2(savefd[1], STDOUT_FILENO);
 }
 
-void	pre_execute(t_command *cmd, int pipefd[2], int savefd[2])
+void	pre_execute(t_command *cmd, int pipefd[2], int savefd[2], int builthin)
 {
 	struct	stat buf;
 
+	if (builthin < 0)
 	{
-	if (with_path(cmd->cmd_name))
-		cmd->full_path = ft_strdup(cmd->cmd_name);
-	else
-		get_path(cmd, ft_strjoin("/", cmd->cmd_name));
-	if (stat(cmd->full_path, &buf) != 0)
-		error(E_WPATH, cmd->full_path);
-	else if (S_ISDIR(buf.st_mode))
-		error(E_ISDIR, cmd->full_path);
+		if (with_path(cmd->cmd_name))
+			cmd->full_path = ft_strdup(cmd->cmd_name);
+		else
+			get_path(cmd, ft_strjoin("/", cmd->cmd_name));
+		if (stat(cmd->full_path, &buf) != 0)
+			error(E_WPATH, 127, cmd->full_path);
+		else if (S_ISDIR(buf.st_mode))
+			error(E_ISDIR, 126, cmd->full_path);
 	}
-	{
-		pipe(pipefd);
-		if (cmd->file && AND(cmd->read_type, RED_FROM * -1))
-			dup_close(cmd->fd, STDIN_FILENO);
-		else if(cmd->file && (AND(cmd->read_type, RED_TO * -1) || AND(cmd->read_type, RED_TO_APP * -1)))
-			dup_close(cmd->fd, STDOUT_FILENO);
-		else if (cmd->next)
-			dup_close(pipefd[WRITE_END], STDOUT_FILENO);
-		else if (cmd->next == NULL)
-			dup2(savefd[1], STDOUT_FILENO);
-	}
+	prepare_fd(cmd, pipefd, savefd);
 }

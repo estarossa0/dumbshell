@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 02:17:00 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/20 17:45:07 by arraji           ###   ########.fr       */
+/*   Updated: 2020/06/02 23:56:38 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #  define BUFFER_SIZE 500
 # endif
 # define vibe_check write(1, "v", 1);
+# define vibe_check2 write(1, "N", 1);
 typedef	struct	s_list
 {
 	struct s_list	*next;
@@ -76,6 +77,7 @@ t_list			*ft_lstmap(t_list *lst, void *(*f)(void *),
 void			ft_lstpr_char(t_list *first);
 void			ft_lstpr_char_en(t_list *first);
 t_list			*ft_lst_test(void);
+t_list			*ft_lstdel_index(t_list **list, void fun(t_list *) , int index);
 char			*ft_ltoa(unsigned long n);
 size_t			ft_number_len(long num);
 int				ft_stradd(char **s1, char *s2, int type);

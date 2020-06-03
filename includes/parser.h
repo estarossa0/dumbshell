@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 16:05:12 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/23 10:47:12 by arraji           ###   ########.fr       */
+/*   Updated: 2020/06/02 19:29:12 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # define	PS "dumbshell$> "
 # define PRINT_RED		"\033[1;31m"
 # define PRINT_GR		"\033[1;32m"
+# define BOLD			"\033[1;31m"
 # define RESET			"\033[0m"
 # define	BS_Q			1
 # define	BD_Q			2

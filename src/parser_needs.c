@@ -42,7 +42,7 @@ static	void	init_word(t_args *new[2], t_args *current, int need[2])
 	need[1] = 0;
 }
 
-void	reverse_args(t_args **args)
+static	void	reverse_args(t_args **args)
 {
 	t_args	*current[2];
 	t_args	*new[2];
@@ -72,7 +72,7 @@ void	reverse_args(t_args **args)
 	*args = new[0];
 }
 
-void	link_argv(t_command *cmd)
+static	void	link_argv(t_command *cmd)
 {
 	int size;
 	t_args	*list[2];
@@ -82,6 +82,7 @@ void	link_argv(t_command *cmd)
 	list[1] = cmd->list_args;
 	size = ft_lstsize((t_list *)cmd->list_args);
 	cmd->argv = (char **)malloc(sizeof(char *) * (size + 1));
+	cmd->argv == NULL ? error(E_STANDARD, 1, NULL) : 1;
 	while (list[1])
 	{
 		list[0] = list[1];

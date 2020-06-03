@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 16:04:36 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/23 10:44:32 by arraji           ###   ########.fr       */
+/*   Updated: 2020/05/23 16:36:48 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,22 +31,19 @@ static	void	switch_current(t_command **current, char *line, int *index, t_all *a
 
 	if (line[*index] == PIPELINE_SEP)
 	{
-		(*index)++;
 		pipe = (t_pipeline*)ft_lstadd_back((t_list **)&(all->pipe), malloc(sizeof(t_pipeline)));
 		pipe->cmd_head = NULL;
 		*current = (t_command *)ft_lstadd_back((t_list **)&(pipe->cmd_head), malloc(sizeof(t_command)));
-		(*current)->list_args = NULL;
-		(*current)->file = NULL;
 		(*current)->read_type = 0;
 	}
 	else
 	{
-		(*index)++;
 		*current = (t_command *)ft_lstadd_back((t_list **)current, malloc(sizeof(t_command)));
-		(*current)->list_args = NULL;
-		(*current)->file = NULL;
 		(*current)->read_type = 1;
 	}
+	(*current)->list_args = NULL;
+	(*current)->file = NULL;
+	(*index)++;
 }
 
 

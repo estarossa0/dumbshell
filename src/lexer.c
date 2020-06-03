@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 16:04:32 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/22 13:38:42 by arraji           ###   ########.fr       */
+/*   Updated: 2020/06/01 03:16:18 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ static	void	check_before(char current, int *data)
 {
 	if (current == '|')
 	{
-		AND(*data, BCHECK) ? error(E_SYNTAX, &current) : 1;
-		AND(*data, BPIPE) ? error(E_SYNTAX, &current) : 1;
+		AND(*data, BCHECK) ? error(E_SYNTAX, 1, &current) : 1;
+		AND(*data, BPIPE) ? error(E_SYNTAX, 1, &current) : 1;
 	}
 	else if (current == ';')
 	{
-		AND(*data, BSEMIC) ? error(E_SYNTAX, &current) : 1;
+		AND(*data, BSEMIC) ? error(E_SYNTAX, 1, &current) : 1;
 	}
 }
 

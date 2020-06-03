@@ -28,6 +28,10 @@ RESET = \033[0m
 BONUS_HEADER_FOLDER = ./bonus_header
 
 SRC_FILES = main.c \
+signals.c \
+builtins.c \
+executing.c \
+need.c \
 pre_execute.c \
 env_handle.c \
 parser_needs.c \

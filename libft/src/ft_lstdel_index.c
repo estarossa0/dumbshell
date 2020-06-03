@@ -1,28 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   ft_lstdel_index.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/10 19:19:35 by arraji            #+#    #+#             */
-/*   Updated: 2020/06/02 21:24:14 by arraji           ###   ########.fr       */
+/*   Created: 2020/05/31 23:01:39 by arraji            #+#    #+#             */
+/*   Updated: 2020/06/02 21:39:37 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_strcmp(char *s1, char *s2)
-{
-	int	index;
-	int	jndex;
+#include "libft.h"
 
-	jndex = 0;
-	index = 0;
-	while (s1[index] || s2[jndex])
+t_list	*ft_lstdel_index(t_list **list, void fun(t_list *) , int index)
+{
+	t_list	*save;
+	t_list	*previous;
+
+	if (index == 0)
 	{
-		if (s1[index] != s2[jndex])
-			return (s1[index] - s2[jndex]);
-		index++;
-		jndex++;
+		save = (*list);
+		*list = (*list)->next;
+		if (fun)
+			fun(save);
+		free(save);
 	}
-	return (0);
+	else
+	{
+		save = *list;
+		while (index--)
+		{
+			previous = save;
+			save = save->next;
+		}
+		previous->next = save->next;
+		if (fun)
+			fun(save);
+		free(save);
+	}
+	return (previous);
 }

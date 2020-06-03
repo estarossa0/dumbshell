@@ -16,7 +16,7 @@ char	*get_var_value(char *var_name)
 	return (NULL);
 }
 
-void	variable_expansion(char *line, int *index, t_command *current)
+void			variable_expansion(char *line, int *index, t_command *current)
 {
 	char	*var_name;
 	int		save;

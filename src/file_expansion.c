@@ -6,13 +6,13 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/20 17:09:52 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/23 10:49:15 by arraji           ###   ########.fr       */
+/*   Updated: 2020/06/01 03:15:23 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "dumbshell.h"
 
-static	void	init_file(t_command *command)
+static	void	overwrite_file(t_command *command)
 {
 	if (command->file)
 	{
@@ -31,32 +31,24 @@ static	char	*get_next_word(char	*line, int *index)
 	while (line[*index + 1] > 0  && line[*index + 1])
 		(*index)++;
 	if (!(word = ft_substr(line, save, (*index) - save + 1)))
-		error(E_STANDARD, NULL);
+		error(E_STANDARD, 1, NULL);
 	return (word);
 }
 
 void			parse_file(t_command *current, char *line, int *index)
 {
-	init_file(current);
-	if (line[*index] == RED_TO)
-	{
-		current->file = get_next_word(line, index);
-		BIT_ON(current->read_type, -1 * RED_TO);
-		if ((current->fd = open(current->file, O_WRONLY | O_CREAT | O_TRUNC, 0644)) < 0)
-			error(E_FILE, current->file);
-	}
-	else if (line[*index] == RED_FROM)
-	{
-		current->file = get_next_word(line, index);
-		BIT_ON(current->read_type, -1 * RED_FROM);
-		if ((current->fd = open(current->file, O_RDONLY)) < 0)
-			error(E_FILE, current->file);
-	}
-	else if (line[*index] == RED_TO_APP)
-	{
-		current->file = get_next_word(line, index);
-		BIT_ON(current->read_type, -1 * RED_TO_APP);
-		if ((current->fd = open(current->file, O_WRONLY | O_CREAT | O_APPEND, 0644)) < 0)
-			error(E_FILE, current->file);
-	}
+	char	type;
+
+	type = line[*index];
+	overwrite_file(current);
+	current->file = get_next_word(line, index);
+	BIT_ON(current->read_type, -1 * type);
+	if (type == RED_TO)
+		current->fd = open(current->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else if (type == RED_FROM)
+		current->fd = open(current->file, O_RDONLY);
+	else if (type == RED_TO_APP)
+		current->fd = open(current->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (current->fd < 0)
+		error(E_FILE, 1, current->file);
 }

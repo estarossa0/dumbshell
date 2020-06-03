@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 16:04:52 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/23 12:39:25 by arraji           ###   ########.fr       */
+/*   Updated: 2020/06/02 19:21:03 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 void	freak_out(int bits, char *line, int index)
 {
 	if (AND(bits, BPIPE))
-		error(E_SYNTAX, &line[index]);
+		error(E_SYNTAX, 1, &line[index]);
 	else if (AND(bits, BD_Q))
-		error(E_SYNTAX, &line[index]);
+		error(E_SYNTAX, 1, &line[index]);
 	else if (AND(bits, BS_Q))
-		error(E_SYNTAX, &line[index]);
+		error(E_SYNTAX, 1, &line[index]);
 	else if (AND(bits, BRED_TO) || AND(bits, BRED_TO_APP)
 	|| AND(bits, BRED_FROM))
-		error(E_SYNTAX, &line[index]);
+		error(E_SYNTAX, 1, &line[index]);
 }
 
 void	chill(int *bits)
@@ -35,23 +35,23 @@ void	chill(int *bits)
 	BIT_OFF(*bits, BRED_TO_APP);
 }
 
-int		error(int err, char *need)
+int		error(int err, int exit_value, char *need)
 {
 	if (need && *need == '\0')
 		need = "newline";
-	else if (err == E_SYNTAX && need)
-	{
-		need[0] = *need;
-		need[1] = '\0';
-	}
 	ft_fprintf(2, "dumbshell %d: ", err);
-	err == E_SYNTAX ? ft_fprintf(2, "parse error near `%s'\n", need) : 1;
+	err == E_SYNTAX ? ft_fprintf(2, "parse error near `%c'\n", need[0]) : 1;
 	err == E_STANDARD ? ft_fprintf(2, "%s.\n", strerror(errno)) : 1;
 	err == E_FILE ? ft_fprintf(2, "`%s` %s\n", need, strerror(errno)) : 1;
 	err == E_NOCMD ? ft_fprintf(2, "command not found: %s\n", need) : 1;
-	err == 	E_WPATH ? ft_fprintf(2, "no such file or directory: %s\n", need) : 1;
-	err ==	E_ISDIR ? ft_fprintf(2, "%s: Is a directory\n", need) : 1;
-	exit(err);
+	err == E_WPATH ? ft_fprintf(2, "no such file or directory: %s\n", need) : 1;
+	err == E_ISDIR ? ft_fprintf(2, "%s: Is a directory\n", need) : 1;
+	err == E_ARGS ? ft_fprintf(1, "%s: too many arguments\n", need) : 1;
+	err == E_CD ? ft_fprintf(1, "cd: %s: no such file or directory\n", need) : 1;
+	err == E_NOT_VAL ? ft_fprintf(2, "export: `%s\': not a valid identifier\n", need) : 1;
+	err == E_EXIT_ARG ? ft_fprintf(2, "exit: `%s\' is notnumeric argument\n", need) : 1;
+	err == E_CD_HOME ? ft_fprintf(2, "cd: HOME not set\n") : 1;
+	exit(exit_value);
 }
 
 void	checker(char *line)

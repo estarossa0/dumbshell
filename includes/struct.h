@@ -6,13 +6,15 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 16:05:20 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/22 12:29:14 by arraji           ###   ########.fr       */
+/*   Updated: 2020/06/02 22:57:16 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCT
 # define STRUCT
-
+# ifndef D_ERROR
+# error "include only dumbshell.h"
+# endif
 typedef	struct	s_parser
 {
 	int		bits;
@@ -52,13 +54,14 @@ typedef	struct	s_all
 	unsigned char	exit_status;
 	t_parser		parser;
 	t_pipeline		*pipe;
+	pid_t			init_pid;
 }				t_all;
 
 typedef	struct	s_env
 {
 	struct	s_env	*next;
-	char	*key;
-	char	*value;
-	char	*full_var;
+	char			*key;
+	char			*value;
+	char			*full_var;
 }				t_env;
 #endif

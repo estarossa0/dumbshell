@@ -1,21 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute.h                                          :+:      :+:    :+:   */
+/*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/05/22 13:31:39 by arraji            #+#    #+#             */
-/*   Updated: 2020/06/02 19:02:02 by arraji           ###   ########.fr       */
+/*   Created: 2020/06/04 00:11:18 by arraji            #+#    #+#             */
+/*   Updated: 2020/06/04 00:24:59 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXCUTE_H
-# define EXCUTE_H
 #include "dumbshell.h"
-# define READ_END	0
-# define WRITE_END	1
-void	pre_execute(t_command *cmd, int pipefd[2], int savfd[2], int builthin);
-void	executing(t_command *cmd, int pipefd[2], int savefd[2]);
-void	exec_builthin(t_command *cmd, int builthin);
-#endif
+
+void	handler(int sig)
+{
+	write(1, "F", 1);
+	if (sig == SIGINT)
+	{
+		signal(SIGINT, SIG_IGN);
+		kill(g_pid, SIGINT);
+	}
+	else if (sig == SIGUSR1)
+		is_exit = 1;
+}
+
+void	child_handler(int sig)
+{
+	write(1, "\n", 2);
+	exit(128 + sig);
+}

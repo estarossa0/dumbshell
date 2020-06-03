@@ -6,47 +6,57 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 16:04:28 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/23 13:31:26 by arraji           ###   ########.fr       */
+/*   Updated: 2020/06/04 00:30:55 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "dumbshell.h"
 
-
 void	init(t_all *all)
 {
-	all->exit_status = 0;
 	all->parser.bits = 64;
 	all->parser.line = NULL;
 	all->parser.rt = 1;
 	all->pipe = NULL;
 	g_env = NULL;
 	g_total_env = 0;
+	g_all = all;
+	all->init_pid = getpid();
+	is_exit = 0;
+	all->exit_status = 0;
+	g_pid = 0;
 	init_env();
-}
-
-void	get_data(t_all *all)
-{
-	char *new;
-
-	while (all->parser.rt == 1)
-	{
-		ft_fprintf(1, PS);
-		all->parser.rt = get_next_line(1, &all->parser.line);
-		lexer(all->parser.line, &all->parser);
-		checker(all->parser.line);
-		parser(all->parser.line, all);
-		list_checker2(all);
-		here_we_go(all);
-		all->pipe = NULL;
-	}
+	// g_env->next->next->next->next = NULL;
 
 }
+
 int main(void)
 {
 	t_all	all;
+	int		exit_data;
 
-	g_all = &all;
 	init(&all);
-	get_data(&all);
+	signal(SIGUSR1, handler);
+	while (1)
+	{
+		signal(SIGINT, handler);
+		if ((g_pid = fork()) == -1)
+			error(E_STANDARD, 1, NULL);
+		if (g_pid == 0)
+		{
+			signal(SIGINT, child_handler);
+			get_data(&all);
+			here_we_go(&all);
+			exit(all.exit_status);
+		}
+		else
+		{
+			wait(&exit_data);
+			all.exit_status = WEXITSTATUS(exit_data);
+			if (WIFSIGNALED(exit_data))
+				WTERMSIG(exit_data) != SIGINT ? exit(128 + WTERMSIG(exit_data)) : 1;
+			else if (is_exit)
+				exit(all.exit_status);
+		}
+	}
 }

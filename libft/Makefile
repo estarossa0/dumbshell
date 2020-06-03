@@ -6,7 +6,7 @@
 #    By: arraji <arraji@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/18 13:57:03 by arraji            #+#    #+#              #
-#    Updated: 2020/05/20 17:57:54 by arraji           ###   ########.fr        #
+#    Updated: 2020/06/01 03:18:16 by arraji           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -89,7 +89,7 @@ SRC_FILES  =	ft_atoi.c \
 				ft_free_tab.c \
 				flip_bit.c \
 				standered_error.c \
-
+				ft_lstdel_index.c \
 
 OBJECT_FILES = $(SRC_FILES:.c=.o)
 OBJECT_FILES := $(addprefix $(OBJECT_FOLDER)/, $(OBJECT_FILES))

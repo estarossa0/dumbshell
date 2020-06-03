@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 17:51:27 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/22 13:38:42 by arraji           ###   ########.fr       */
+/*   Updated: 2020/06/01 03:15:48 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static	void	set_semicolon(char *line, int index, t_parser *parser)
 		return ;
 	freak_out(parser->bits, line, index);
 	if (AND(parser->bits, BSEMIC))
-		error(E_SYNTAX, &line[index]);
+		error(E_SYNTAX, 1, &line[index]);
 	else
 	{
 		line[index] = PIPELINE_SEP;
@@ -76,7 +76,7 @@ static	void	set_pipe(char *line, int index, t_parser *parser)
 		return ;
 	freak_out(parser->bits, line, index);
 	if (AND(parser->bits, BPIPE))
-		error(E_SYNTAX, &line[index]);
+		error(E_SYNTAX, 1, &line[index]);
 	else
 	{
 		line[index] = CMD_SEP;
