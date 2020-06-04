@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 16:04:36 by arraji            #+#    #+#             */
-/*   Updated: 2020/05/23 16:36:48 by arraji           ###   ########.fr       */
+/*   Updated: 2020/06/04 07:09:55 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ static	void	init_list(t_command **current, t_all *all)
 		*current = (t_command *)ft_lstadd_back((t_list **)&(all->pipe->cmd_head), malloc(sizeof(t_command)));
 		(*current)->list_args = NULL;
 		(*current)->file = NULL;
+		(*current)->argv = NULL;
 		(*current)->read_type = 0;
+		(*current)->full_path = NULL;
 	}
 }
 
@@ -43,6 +45,8 @@ static	void	switch_current(t_command **current, char *line, int *index, t_all *a
 	}
 	(*current)->list_args = NULL;
 	(*current)->file = NULL;
+	(*current)->argv = NULL;
+	(*current)->full_path = NULL;
 	(*index)++;
 }
 
@@ -63,7 +67,7 @@ void	add_word(t_args **list, char *word, int type)
 }
 
 
-void			parser(char *line, t_all *all)
+bool			parser(char *line, t_all *all)
 {
 	int			index;
 	t_command	*current;
@@ -76,7 +80,10 @@ void			parser(char *line, t_all *all)
 			continue ;
 		else if (line[index] == RED_FROM || line[index] == RED_TO
 		|| line[index] == RED_TO_APP)
-			parse_file(current, line, &index);
+		{
+			if (parse_file(current, line, &index) == false)
+				return (false);
+		}
 		else if (line[index] == VAR)
 			variable_expansion(line, &index, current);
 		else if (line[index] == CMD_SEP || line[index] == PIPELINE_SEP)
@@ -84,5 +91,5 @@ void			parser(char *line, t_all *all)
 		else
 			add_word(&current->list_args, &line[index], 0);
 	}
-	reverse_parser(all);
+	return (reverse_parser(all));
 }

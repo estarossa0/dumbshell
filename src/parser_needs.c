@@ -62,17 +62,14 @@ static	void	reverse_args(t_args **args)
 			copy_word(current[1], new[1], &needs[1]);
 		current[1] = current[1]->next;
 		if (current[0]->type == 0)
-			free(current[0]);
+			ft_end((void**)&(current[0]), NULL, 1);
 		else
-		{
-			free(current[0]->str);
-			free(current[0]);
-		}
+			ft_end((void**)&(current[0]->str), (void**)&(current[0]), 1);
 	}
 	*args = new[0];
 }
 
-static	void	link_argv(t_command *cmd)
+static	bool	link_argv(t_command *cmd)
 {
 	int size;
 	t_args	*list[2];
@@ -82,7 +79,8 @@ static	void	link_argv(t_command *cmd)
 	list[1] = cmd->list_args;
 	size = ft_lstsize((t_list *)cmd->list_args);
 	cmd->argv = (char **)malloc(sizeof(char *) * (size + 1));
-	cmd->argv == NULL ? error(E_STANDARD, 1, NULL) : 1;
+	if (cmd->argv == NULL)
+		return ( error(E_STANDARD, 1, NULL));
 	while (list[1])
 	{
 		list[0] = list[1];
@@ -91,9 +89,11 @@ static	void	link_argv(t_command *cmd)
 		ft_end((void **)&list[0], NULL, 1);
 	}
 	cmd->argv[index] = NULL;
+	cmd->list_args = NULL;
+	return (true);
 }
 
-void	reverse_parser(t_all *all)
+bool	reverse_parser(t_all *all)
 {
 	t_pipeline	*current_pipe;
 	t_command	*current_cmd;
@@ -105,10 +105,12 @@ void	reverse_parser(t_all *all)
 		while (current_cmd)
 		{
 			reverse_args(&(current_cmd->list_args));
-			link_argv(current_cmd);
+			if (link_argv(current_cmd) == false)
+				return (false);
 			current_cmd->cmd_name = current_cmd->argv[0];
 			current_cmd = current_cmd->next;
 		}
 		current_pipe = current_pipe->next;
 	}
+	return (true);
 }

@@ -6,14 +6,16 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 16:04:55 by arraji            #+#    #+#             */
-/*   Updated: 2020/06/04 00:23:18 by arraji           ###   ########.fr       */
+/*   Updated: 2020/06/04 07:00:10 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "dumbshell.h"
-void	here_we_go(t_all *all)
+
+bool	here_we_go(t_all *all)
 {
 	t_pipeline *pipe;
+	t_command	*cmd;
 	int	pipefd[2];
 	int	savefd[2];
 
@@ -21,28 +23,34 @@ void	here_we_go(t_all *all)
 	fd_saving(savefd);
 	while (pipe)
 	{
-		while(pipe->cmd_head)
+		cmd = pipe->cmd_head;
+		while(cmd)
 		{
-			executing(pipe->cmd_head, pipefd, savefd);
-			pipe->cmd_head = pipe->cmd_head->next;
+			if (executing(cmd, pipefd, savefd) == false)
+			{
+				fd_saving(savefd);
+				return (false);
+			}
+			cmd = cmd->next;
 		}
 		pipe = pipe->next;
 	}
 	fd_saving(savefd);
+	return(true);
 }
 
-void	get_data(t_all *all)
+bool	get_data(t_all *all)
 {
 	ft_fprintf(1, BOLD PRINT_RED PS RESET);
 	if ((all->parser.rt = get_next_line(1, &all->parser.line)) == -1)
-		error(E_STANDARD, 1, NULL);
+		return (error(E_STANDARD, 1, NULL));
 	if (all->parser.rt == 0)
 	{
-		kill(g_all->init_pid, SIGUSR1);
-		signal(SIGUSR1, handler);
 		write(1, "\n", 1);
-		exit(0);
+		return (false);
 	}
-	lexer(all->parser.line, &all->parser);
-	parser(all->parser.line, all);
+	if (lexer(all->parser.line, &all->parser) == false ||
+	parser(all->parser.line, all) == false)
+		return (false);
+	return (true);
 }

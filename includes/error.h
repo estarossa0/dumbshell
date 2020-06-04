@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 16:05:04 by arraji            #+#    #+#             */
-/*   Updated: 2020/06/02 19:20:09 by arraji           ###   ########.fr       */
+/*   Updated: 2020/06/04 01:02:09 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,6 @@
 # define	E_EXIT_ARG	10
 # define	E_CD_HOME	11
 int		error(int error, int exit_value, char *need);
-void	freak_out(int bits, char *line, int index);
+int		freak_out(int bits, char *line, int index);
 void	chill(int *bits);
 #endif

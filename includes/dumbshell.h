@@ -6,12 +6,15 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 16:05:00 by arraji            #+#    #+#             */
-/*   Updated: 2020/06/04 00:22:43 by arraji           ###   ########.fr       */
+/*   Updated: 2020/06/04 03:31:52 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DUMBSHELL
 # define DUMBSHELL
+typedef char bool;
+#define true 0
+#define false 1
 
 # define _DEFAULT_SOURCE
 # define D_ERROR
@@ -36,11 +39,9 @@ t_all	*g_all;
 extern char **environ;
 t_env		*g_env;
 int			g_total_env;
-pid_t		g_pid;
-char		is_exit;
+bool		shit_happened;
 void	checker(char *line);
 void	list_checker(t_all *all);
 void	list_checker2(t_all *all);
-void	get_data(t_all *all);
-void	here_we_go(t_all *all);
+bool	here_we_go(t_all *all);
 #endif

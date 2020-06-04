@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/20 17:09:52 by arraji            #+#    #+#             */
-/*   Updated: 2020/06/01 03:15:23 by arraji           ###   ########.fr       */
+/*   Updated: 2020/06/04 03:39:26 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,14 @@ static	char	*get_next_word(char	*line, int *index)
 	return (word);
 }
 
-void			parse_file(t_command *current, char *line, int *index)
+bool			parse_file(t_command *current, char *line, int *index)
 {
 	char	type;
 
 	type = line[*index];
 	overwrite_file(current);
-	current->file = get_next_word(line, index);
+	if ((current->file = get_next_word(line, index)) == NULL)
+		return (false);
 	BIT_ON(current->read_type, -1 * type);
 	if (type == RED_TO)
 		current->fd = open(current->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -50,5 +51,6 @@ void			parse_file(t_command *current, char *line, int *index)
 	else if (type == RED_TO_APP)
 		current->fd = open(current->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (current->fd < 0)
-		error(E_FILE, 1, current->file);
+		return (error(E_FILE, 1, current->file));
+	return (true);
 }

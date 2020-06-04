@@ -6,16 +6,21 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/20 04:37:40 by arraji            #+#    #+#             */
-/*   Updated: 2019/11/01 00:31:37 by arraji           ###   ########.fr       */
+/*   Updated: 2020/06/04 03:34:51 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstdelone(t_list *lst, void (*del)(void*))
+t_list	*ft_lstdelone(t_list *lst, void (*del)(void*))
 {
-	if (!lst || !del)
-		return ;
-	del(lst->content);
+	t_list	*save;
+
+	if (!lst)
+		return (NULL);
+	save = lst->next;
+	if(del)
+		del(lst->content);
 	free(lst);
+	return (save);
 }

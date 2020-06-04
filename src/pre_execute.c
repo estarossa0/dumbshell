@@ -6,7 +6,7 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/22 12:32:22 by arraji            #+#    #+#             */
-/*   Updated: 2020/06/02 19:03:50 by arraji           ###   ########.fr       */
+/*   Updated: 2020/06/04 06:47:10 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static	char	*parse_path(char *all_paths, char *name)
 	return (NULL);
 }
 
-static	void	get_path(t_command *cmd, char *name)
+static	bool	get_path(t_command *cmd, char *name)
 {
 	t_env	*curr;
 	char	*path;
@@ -52,12 +52,16 @@ static	void	get_path(t_command *cmd, char *name)
 			if (path != NULL)
 				cmd->full_path = path;
 			else
-				error(E_NOCMD, 127, cmd->cmd_name);
+			{
+				free(name);
+				return (error(E_NOCMD, 127, cmd->cmd_name));
+			}
 			break ;
 		}
 		curr = curr->next;
 	}
 	free(name);
+	return (true);
 }
 
 static	int		with_path(char *name)
@@ -87,7 +91,7 @@ static	void	prepare_fd(t_command *cmd, int pipefd[2], int savefd[2])
 		dup2(savefd[1], STDOUT_FILENO);
 }
 
-void	pre_execute(t_command *cmd, int pipefd[2], int savefd[2], int builthin)
+bool	pre_execute(t_command *cmd, int pipefd[2], int savefd[2], int builthin)
 {
 	struct	stat buf;
 
@@ -96,11 +100,15 @@ void	pre_execute(t_command *cmd, int pipefd[2], int savefd[2], int builthin)
 		if (with_path(cmd->cmd_name))
 			cmd->full_path = ft_strdup(cmd->cmd_name);
 		else
-			get_path(cmd, ft_strjoin("/", cmd->cmd_name));
+		{
+			if (get_path(cmd, ft_strjoin("/", cmd->cmd_name)) == false)
+				return (false);
+		}
 		if (stat(cmd->full_path, &buf) != 0)
-			error(E_WPATH, 127, cmd->full_path);
+			return (error(E_WPATH, 127, cmd->full_path));
 		else if (S_ISDIR(buf.st_mode))
-			error(E_ISDIR, 126, cmd->full_path);
+			return (error(E_ISDIR, 126, cmd->full_path));
 	}
 	prepare_fd(cmd, pipefd, savefd);
+	return (true);
 }

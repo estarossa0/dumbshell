@@ -6,35 +6,41 @@
 /*   By: arraji <arraji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 16:04:32 by arraji            #+#    #+#             */
-/*   Updated: 2020/06/01 03:16:18 by arraji           ###   ########.fr       */
+/*   Updated: 2020/06/04 07:48:54 by arraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "dumbshell.h"
 
-static	void	check_before(char current, int *data)
+static	bool	check_before(char current, int *data)
 {
 	if (current == '|')
 	{
-		AND(*data, BCHECK) ? error(E_SYNTAX, 1, &current) : 1;
-		AND(*data, BPIPE) ? error(E_SYNTAX, 1, &current) : 1;
+		if (AND(*data, BCHECK))
+			return (error(E_SYNTAX, 1, &current));
+		if (AND(*data, BPIPE))
+			return (error(E_SYNTAX, 1, &current));
 	}
 	else if (current == ';')
-	{
-		AND(*data, BSEMIC) ? error(E_SYNTAX, 1, &current) : 1;
-	}
+		if (AND(*data, BSEMIC))
+			return (error(E_SYNTAX, 1, &current));
+	return (0);
 }
 
-void			lexer(char *line, t_parser *parser)
+bool			lexer(char *line, t_parser *parser)
 {
 	int	i;
 
 	i = -1;
+	chill(&parser->bits);
 	while (line[++i])
 	{
-		check_before(line[i], &parser->bits);
-		sets(line, i, parser);
+		if (check_before(line[i], &parser->bits) == false ||
+		sets(line, i, parser) == false)
+			return (false);
 	}
-	freak_out(parser->bits, line, i);
+	if (freak_out(parser->bits, line, i) == false)
+		return(false);
 	chill(&parser->bits);
+	return (true);
 }
